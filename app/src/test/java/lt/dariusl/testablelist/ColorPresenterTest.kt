@@ -27,6 +27,15 @@ class ColorPresenterTest {
         assertThat(adapter.models, `is`(listOf(TestableListActivity.ColorViewModel(1, 1, red, false))))
     }
 
+    @Test
+    fun testInitialValuesAreSorted() {
+        ColorPresenter(adapter, listOf(RowModel(2, red), RowModel(5, blue)))
+        assertThat(adapter.models, `is`(listOf(
+                TestableListActivity.ColorViewModel(5, 1, blue, false),
+                TestableListActivity.ColorViewModel(2, 1, red, false)
+        )))
+    }
+
     inner class MockAdapter : ColorAdapter {
 
         val models: MutableList<TestableListActivity.ColorViewModel> = mutableListOf()
