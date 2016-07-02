@@ -22,11 +22,14 @@ class TestableListActivity : AppCompatActivity() {
         setContentView(R.layout.layout_list)
         ButterKnife.bind(this)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = ColorAdapter(listOf(
-                ColorViewModel(5, 1, color(R.color.list_red), false),
-                ColorViewModel(3, 2, color(R.color.list_green), true),
-                ColorViewModel(3, 2, color(R.color.list_green), false),
-                ColorViewModel(1, 1, color(R.color.list_blue), false)))
+        val adapter = ColorAdapterImpl()
+        recyclerView.adapter = adapter
+        ColorPresenter(adapter, listOf(
+                RowModel(5, color(R.color.list_red)),
+                RowModel(3, color(R.color.list_green)),
+                RowModel(3, color(R.color.list_green)),
+                RowModel(1, color(R.color.list_blue)))
+        )
     }
 
     @ColorInt
@@ -41,14 +44,16 @@ class TestableListActivity : AppCompatActivity() {
             val bottomDivider: Boolean
     )
 
-    inner class ColorAdapter (val data: List<ColorViewModel>) : RecyclerView.Adapter<ColorAdapter.ColorViewHolder>() {
+    inner class ColorAdapterImpl() : RecyclerView.Adapter<ColorAdapterImpl.ColorViewHolder>(), ColorAdapter {
+
+        override lateinit var presenter: ColorPresenter
 
         override fun getItemCount(): Int {
-            return data.size
+            return presenter.items.size
         }
 
         override fun onBindViewHolder(holder: ColorViewHolder, position: Int) {
-            holder.bind(data[position])
+            holder.bind(presenter.items[position])
         }
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ColorViewHolder {
@@ -69,6 +74,7 @@ class TestableListActivity : AppCompatActivity() {
                 priority.text = model.priority.toString()
                 groupSize.text = model.size.toString()
                 itemView.setBackgroundColor(model.color)
+
             }
         }
     }

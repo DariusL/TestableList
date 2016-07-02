@@ -1,10 +1,10 @@
 package lt.dariusl.testablelist
 
-import org.hamcrest.*
+import org.hamcrest.FeatureMatcher
+import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
-import org.junit.Assert.*
+import org.junit.Assert.assertThat
 import org.junit.Test
-import java.util.*
 
 class ColorPresenterTest {
 
@@ -95,7 +95,7 @@ class ColorPresenterTest {
         }
     }
 
-    inner class MockAdapter : ColorAdapter {
+    class MockAdapter : ColorAdapter {
 
         val models: MutableList<TestableListActivity.ColorViewModel> = mutableListOf()
         lateinit override var presenter: ColorPresenter

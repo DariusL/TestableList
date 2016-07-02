@@ -1,7 +1,5 @@
 package lt.dariusl.testablelist
 
-import java.text.FieldPosition
-
 class ColorPresenter (private val adapter: ColorAdapter, initialValues: List<RowModel>){
     private val viewModels = mutableListOf<TestableListActivity.ColorViewModel>()
     val items: List<TestableListActivity.ColorViewModel> = viewModels
