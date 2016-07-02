@@ -51,6 +51,32 @@ class ColorPresenterTest {
         ))
     }
 
+    @Test
+    fun testInsertKeepsOrder() {
+        val presenter = ColorPresenter(adapter, listOf(
+                RowModel(10, green),
+                RowModel(5, blue)
+        ))
+        presenter.insert(RowModel(8, red))
+        assertThat(adapter.models, hasItems(
+                color(`is`(green)),
+                color(`is`(red)),
+                color(`is`(blue))
+        ))
+    }
+
+    @Test
+    fun testInsertUpdatesGroupSizes() {
+        val presenter = ColorPresenter(adapter, listOf(
+                RowModel(10, red)
+        ))
+        presenter.insert(RowModel(8, red))
+        assertThat(adapter.models, hasItems(
+                size(`is`(2)),
+                size(`is`(2))
+        ))
+    }
+
     fun priority(matcher: Matcher<Int>) : Matcher<TestableListActivity.ColorViewModel> {
         return propertyMatcher(matcher, {it.priority}, "priority")
     }
