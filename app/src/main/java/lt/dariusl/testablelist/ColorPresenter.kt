@@ -13,7 +13,7 @@ class ColorPresenter (private val adapter: ColorAdapter, initialValues: List<Row
         viewModels.addAll(
                 rows
                         .sortedByDescending { it.priority }
-                        .map { TestableListActivity.ColorViewModel(it.priority, 1, it.color, false) }
+                        .map { TestableListActivity.ColorViewModel(it.priority, 1, it.color) }
         )
         setSizesAndDividers()
         adapter.notifyDataSetChanged()
@@ -28,7 +28,7 @@ class ColorPresenter (private val adapter: ColorAdapter, initialValues: List<Row
             val end = findGroup(start)
             val size = end - start
             for (position in start..end - 1){
-                viewModels[position] = viewModels[position].copy(size = size, bottomDivider = position != end - 1)
+                viewModels[position] = viewModels[position].copy(size = size)
             }
             start = end
         }

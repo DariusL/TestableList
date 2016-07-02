@@ -40,8 +40,7 @@ class TestableListActivity : AppCompatActivity() {
     data class ColorViewModel(
             val priority: Int,
             val size: Int,
-            @ColorInt val color: Int,
-            val bottomDivider: Boolean
+            @ColorInt val color: Int
     )
 
     inner class ColorAdapterImpl() : RecyclerView.Adapter<ColorAdapterImpl.ColorViewHolder>(), ColorAdapter {
