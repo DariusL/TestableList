@@ -1,12 +1,19 @@
 package lt.dariusl.testablelist
 
-class ColorPresenter (private val adapter: ColorAdapter, initialValues: List<RowModel>){
+import android.os.Bundle
+
+class ColorPresenter (private val adapter: ColorAdapter, initialValues: List<RowModel>, state: Bundle?){
+
     private val viewModels = mutableListOf<TestableListActivity.ColorViewModel>()
     val items: List<TestableListActivity.ColorViewModel> = viewModels
 
     init {
         adapter.presenter = this
-        insert(initialValues)
+        if (state == null) {
+            insert(initialValues)
+        } else {
+
+        }
     }
 
     private fun insert(rows: List<RowModel>) {
@@ -24,6 +31,10 @@ class ColorPresenter (private val adapter: ColorAdapter, initialValues: List<Row
         viewModels.sortByDescending { it.priority }
         setSizes()
         adapter.notifyDataSetChanged()
+    }
+
+    fun saveState(outState: Bundle) {
+        
     }
 
     private fun setSizes() {

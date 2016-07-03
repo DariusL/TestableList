@@ -37,8 +37,14 @@ class TestableListActivity : AppCompatActivity() {
                 RowModel(5, color(R.color.list_red)),
                 RowModel(3, color(R.color.list_green)),
                 RowModel(3, color(R.color.list_green)),
-                RowModel(1, color(R.color.list_blue)))
+                RowModel(1, color(R.color.list_blue))),
+                savedInstanceState
         )
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        presenter.saveState(outState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

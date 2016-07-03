@@ -1,5 +1,6 @@
 package lt.dariusl.testablelist
 
+import android.os.Bundle
 import org.hamcrest.FeatureMatcher
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
@@ -19,20 +20,20 @@ class ColorPresenterTest {
 
     @Test
     fun testInitialize() {
-        val presenter = ColorPresenter(adapter, emptyList())
+        val presenter = instantiate(emptyList())
         assertThat(adapter.presenter, `is`(presenter))
         assertThat(adapter.models, `is`(mutableListOf()))
     }
 
     @Test
     fun testInsertSingleInitialValue() {
-        ColorPresenter(adapter, listOf(RowModel(1, red)))
+        instantiate(listOf(RowModel(1, red)))
         assertThat(adapter.models, `is`(listOf(TestableListActivity.ColorViewModel(1, 1, red))))
     }
 
     @Test
     fun testInitialValuesAreSorted() {
-        ColorPresenter(adapter, listOf(RowModel(2, red), RowModel(5, blue)))
+        instantiate(listOf(RowModel(2, red), RowModel(5, blue)))
         assertThat(adapter.models, `is`(listOf(
                 TestableListActivity.ColorViewModel(5, 1, blue),
                 TestableListActivity.ColorViewModel(2, 1, red)
@@ -41,7 +42,7 @@ class ColorPresenterTest {
 
     @Test
     fun testInitialGroupSizesAreSet() {
-        ColorPresenter(adapter, listOf(
+        instantiate(listOf(
                 RowModel(10, green),
                 RowModel(5, red),
                 RowModel(2, red),
@@ -56,7 +57,7 @@ class ColorPresenterTest {
 
     @Test
     fun testInsertKeepsOrder() {
-        val presenter = ColorPresenter(adapter, listOf(
+        val presenter = instantiate(listOf(
                 RowModel(10, green),
                 RowModel(5, blue)
         ))
@@ -70,7 +71,7 @@ class ColorPresenterTest {
 
     @Test
     fun testInsertUpdatesGroupSizes() {
-        val presenter = ColorPresenter(adapter, listOf(
+        val presenter = instantiate(listOf(
                 RowModel(10, red)
         ))
         presenter.insert(RowModel(8, red))
@@ -78,6 +79,16 @@ class ColorPresenterTest {
                 size(`is`(2)),
                 size(`is`(2))
         ))
+    }
+
+    @Test
+    fun testSaveState() {
+        var presenter = instantiate(listOf(RowModel(10, red), RowModel(5, blue)))
+        val state = Bundle()
+        val items = presenter.items.toList()
+        presenter.saveState(state)
+        presenter = ColorPresenter(adapter, emptyList(), state)
+        assertThat(presenter.items, `is`(items))
     }
 
     fun priority(matcher: Matcher<Int>) : Matcher<TestableListActivity.ColorViewModel> {
@@ -99,6 +110,10 @@ class ColorPresenterTest {
             }
         }
     }
+
+    fun instantiate(values: List<RowModel>) : ColorPresenter = instantiate(values, null)
+
+    fun instantiate(values: List<RowModel>, state: Bundle?) = ColorPresenter(adapter, values, state)
 
     class MockAdapter : ColorAdapter {
 
