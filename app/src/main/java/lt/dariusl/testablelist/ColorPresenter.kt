@@ -15,18 +15,18 @@ class ColorPresenter (private val adapter: ColorAdapter, initialValues: List<Row
                         .sortedByDescending { it.priority }
                         .map { TestableListActivity.ColorViewModel(it.priority, 1, it.color) }
         )
-        setSizesAndDividers()
+        setSizes()
         adapter.notifyDataSetChanged()
     }
 
     fun insert(row: RowModel) {
         viewModels.add(TestableListActivity.ColorViewModel(row.priority, 1, row.color))
         viewModels.sortByDescending { it.priority }
-        setSizesAndDividers()
+        setSizes()
         adapter.notifyDataSetChanged()
     }
 
-    private fun setSizesAndDividers() {
+    private fun setSizes() {
         if(viewModels.size == 0){
             return
         }

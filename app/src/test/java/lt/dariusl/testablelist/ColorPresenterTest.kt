@@ -5,7 +5,10 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
 import org.junit.Assert.assertThat
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricGradleTestRunner
 
+@RunWith(RobolectricGradleTestRunner::class)
 class ColorPresenterTest {
 
     val red = 0x00FF0000
