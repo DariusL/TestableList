@@ -6,16 +6,25 @@ import android.support.annotation.ColorRes
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import java.util.*
 
 class TestableListActivity : AppCompatActivity() {
 
     @BindView(R.id.list_recycler)
     internal lateinit var recyclerView: RecyclerView
+
+    private lateinit var presenter: ColorPresenter
+
+    private val random = Random()
+
+    private val colorIds = listOf(R.color.list_red, R.color.list_green, R.color.list_blue, R.color.list_yellow)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,12 +33,32 @@ class TestableListActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         val adapter = ColorAdapterImpl()
         recyclerView.adapter = adapter
-        ColorPresenter(adapter, listOf(
+        presenter = ColorPresenter(adapter, listOf(
                 RowModel(5, color(R.color.list_red)),
                 RowModel(3, color(R.color.list_green)),
                 RowModel(3, color(R.color.list_green)),
                 RowModel(1, color(R.color.list_blue)))
         )
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true;
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_add -> {
+                addItem()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun addItem() {
+        presenter.insert(RowModel(getRandomPriority(), getRandomColor()))
     }
 
     @ColorInt
@@ -77,5 +106,9 @@ class TestableListActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun getRandomPriority() = random.nextInt(50)
+
+    private fun getRandomColor() = color(colorIds[random.nextInt(3)])
 
 }
